@@ -1,3 +1,7 @@
+import sys
+import inspect
+
+
 class BasePolicy():
     def __init__(self):
         pass
@@ -5,8 +9,9 @@ class BasePolicy():
     def rollout(self, bag):
         raise NotImplementedError
 
+
 class GoBust():
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         self.white_score = 0
         self.current_score = 0
         self.rollout = []
@@ -19,4 +24,18 @@ class GoBust():
             self.current_score += token.value
             self.rollout.append(token)
 
-        return self.current_score, self.rollout
+        # With this policy we always play until we explode
+        exploded = True
+
+        # Collect the outcome in a dict
+        outcome = {
+            'score': self.current_score,
+            'exploded': exploded,
+            'rollout': self.rollout,
+        }
+
+        return outcome
+
+
+clsmembers_pairs = inspect.getmembers(sys.modules[__name__], inspect.isclass)
+POLICYS = {k: v for (k, v) in clsmembers_pairs}

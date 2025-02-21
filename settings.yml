@@ -1,0 +1,14 @@
+experiment: 'SimulateOneRound'
+experiment_settings:
+  num_samples: 10
+  
+policy: 'GoBust'
+policy_settings:
+  setting1: 1
+  setting2: 2
+
+bag_settings:
+  bought_tokens:
+    o1: 1
+
+datahandler: 'RepeatSingleRound'
