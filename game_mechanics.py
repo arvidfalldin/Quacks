@@ -74,8 +74,17 @@ class Bag():
         # Make a copy of the original bag for easy resetting
         self._bag_backup = self._bag.copy()
 
+    def __str__(self):
+        s = '('
+        for token in self._bag:
+            s += str(token) + ', '
+        return s[:-2] + ')'
+
     def sample(self):
-        return random.sample(self._bag, 1)[0]
+        sample = random.sample(self._bag, 1)[0]
+        self._bag.remove(sample)
+        return sample
 
     def reset(self):
-        self._bag = self._bag_backup
+        # NOTE Not sure if .copy() is necessary here..
+        self._bag = self._bag_backup.copy()

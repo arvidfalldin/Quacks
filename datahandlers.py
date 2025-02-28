@@ -24,11 +24,6 @@ class RepeatSingleRound():
         num_blacks = rollout.count('b1')
         self.data['num_blacks'].append(num_blacks)
 
-        string = []
-        for token in rollout:
-            print(token)
-        print()
-
     def post_process(self,):
         pass
 

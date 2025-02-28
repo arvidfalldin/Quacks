@@ -12,6 +12,7 @@ def create_parser():
 
     return parser
 
+
 def load_settings(yaml_file):
     import yaml
     loader = yaml.SafeLoader

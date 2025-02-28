@@ -40,7 +40,6 @@ class SimulateOneRound():
         # Plot the score distribution
         score = np.array(self.datahandler.data['score'])
 
-        print(score)
         n_bins = len(np.unique(score))
         ax.hist(score, bins=n_bins)
         ax.set_xlabel('Score')

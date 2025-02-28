@@ -9,9 +9,14 @@ class BasePolicy():
     def rollout(self, bag):
         raise NotImplementedError
 
+    def reset(self,):
+        raise NotImplementedError
 
-class GoBust():
+class GoBust(BasePolicy):
     def __init__(self, *args, **kwargs):
+        self.reset()
+
+    def reset(self):
         self.white_score = 0
         self.current_score = 0
         self.rollout = []
@@ -33,6 +38,8 @@ class GoBust():
             'exploded': exploded,
             'rollout': self.rollout,
         }
+
+        self.reset()
 
         return outcome
 

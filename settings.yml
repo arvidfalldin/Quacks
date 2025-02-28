@@ -1,6 +1,6 @@
 experiment: 'SimulateOneRound'
 experiment_settings:
-  num_samples: 10
+  num_samples: 10000
   
 policy: 'GoBust'
 policy_settings:
