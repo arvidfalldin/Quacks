@@ -74,6 +74,10 @@ class Bag():
         # Make a copy of the original bag for easy resetting
         self._bag_backup = self._bag.copy()
 
+    def add_token(self, token):
+        self._bag_backup.append(token)
+
+
     def __str__(self):
         s = '('
         for token in self._bag:
