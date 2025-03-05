@@ -22,12 +22,18 @@ class GoBust(BasePolicy):
         self.rollout = []
 
     def play(self, bag):
+        multiplier = 1
         while self.white_score < 8:
             token = bag.sample()
             if token.is_white:
                 self.white_score += token.value
-            self.current_score += token.value
+            self.current_score += token.value*multiplier
             self.rollout.append(token)
+
+            if token.color == 'yellow':
+                multiplier = 2
+            else:
+                multiplier = 1
 
         # With this policy we always play until we explode
         exploded = True

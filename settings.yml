@@ -10,5 +10,8 @@ policy_settings:
 bag_settings:
   bought_tokens:
     o1: 0
+    k1: 0
+    y1: 3
+    g4: 3 
 
 datahandler: 'RepeatSingleRound'

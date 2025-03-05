@@ -12,6 +12,8 @@ COLOR_MAP = {
     'w': 'white',
     'o': 'orange',
     'g': 'green',
+    'k': 'black',
+    'y': 'yellow',
 }
 
 INV_COLOR_MAP = {v: k for k, v in COLOR_MAP.items()}
@@ -29,6 +31,8 @@ class Token():
     def __str__(self):
         return self._as_string
 
+    def __eq__(self, token):
+        return (self.value == token.value and self.color == token.color)
 
 class Bag():
     def __init__(self, bought_tokens={}, *args, **kwargs):

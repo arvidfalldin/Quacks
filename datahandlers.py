@@ -21,8 +21,8 @@ class RepeatSingleRound():
         self.data['exploded'].append(exploded)
 
         # Record the number of black tokens played
-        num_blacks = rollout.count('b1')
-        self.data['num_blacks'].append(num_blacks)
+        num_black = rollout.count('b1')
+        self.data['num_black'].append(num_black)
 
     def post_process(self,):
         pass
