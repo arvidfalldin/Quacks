@@ -34,6 +34,7 @@ class Token():
     def __eq__(self, token):
         return (self.value == token.value and self.color == token.color)
 
+
 class Bag():
     def __init__(self, bought_tokens={}, *args, **kwargs):
 
@@ -79,8 +80,8 @@ class Bag():
         self._bag_backup = self._bag.copy()
 
     def add_token(self, token):
+        # TODO Ugly, Fix this
         self._bag_backup.append(token)
-
 
     def __str__(self):
         s = '('
@@ -88,11 +89,48 @@ class Bag():
             s += str(token) + ', '
         return s[:-2] + ')'
 
+    def __len__(self):
+        return len(self._bag)
+
     def sample(self):
         sample = random.sample(self._bag, 1)[0]
         self._bag.remove(sample)
+        if sample.color == 'white':
+            self.white_tokens[sample.value] += -1
+            self.n_white += 1
         return sample
 
     def reset(self):
         # NOTE Not sure if .copy() is necessary here..
         self._bag = self._bag_backup.copy()
+
+        self.white_tokens = {1: 0, 2: 0, 3: 0}
+        self.n_white = 0
+        for token in self._bag:
+            if token.color == 'white':
+                self.n_white += 1
+                self.white_tokens[token.value] += 1
+
+
+class Board():
+    def __init__(self, rat_position=0, potion_available=True):
+        # Start out with an empty sequence of tokens
+        self._tokens = []
+        self.rat_position = rat_position
+        self.potion_available = potion_available
+
+
+
+# Data on the rewards associated with each slot on the board
+COINS = [*range(1, 16), 15, 16, 16, 17, 17, 18, 18, 19, 19, 20,
+         20, 21, 21, 22, 22, 23, 23, 24, 24, 25, 25, 26, 26, 27,
+         27, 28, 28, 29, 29, 30, 30, 31, 31, 32, 32, 33, 33, 35]
+
+VICTORY_POINTS = [0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3,
+                  3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8,
+                  8, 8, 9, 9, 9, 10, 10, 10, 11, 11, 11, 12, 12,
+                  12, 12, 13, 13, 13, 14, 14, 15]
+
+RUBY = [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0,
+        1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0,
+        0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0]

@@ -36,7 +36,7 @@ if __name__ == "__main__":
     experiment.run()
 
     # Process the outcome of the experiment(s)
-    experiment.process_result()
+    experiment.process_results()
 
 
     # scores = np.zeros((N, M))

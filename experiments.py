@@ -7,7 +7,7 @@ from game_mechanics import Token
 
 class SimulateOneRound():
     """
-    Simulate one round of quacks (posiible multiple times)
+    Simulate one round of quacks (possibly multiple times)
     """
     def __init__(self,
                  policy,
@@ -33,7 +33,7 @@ class SimulateOneRound():
             # Reset the experiment
             self.reset()
 
-    def process_result(self,):
+    def process_results(self,):
 
         # Create a figure
         fig, ax = plt.subplots(1, 1)
@@ -146,6 +146,42 @@ class SweepOrange():
 
     def reset(self):
         self.bag.reset()
+
+
+class TestPolicy():
+    """
+    Test policy (or something else) by simulating a single round of quacks
+    (once)
+    """
+    def __init__(self,
+                 policy,
+                 bag,
+                 datahandler,
+                 *args, **kwargs):
+
+        self.policy = policy
+        self.bag = bag
+
+    def run(self):
+
+        # Use the policy to play a round
+        outcome = self.policy.play(self.bag)
+
+        print(outcome)
+
+        print("Board")
+        for token in outcome['rollout']:
+            print(token)
+
+        print("Bag")
+        print(self.bag)
+
+    def reset(self):
+        self.bag.reset()
+
+    def process_results(self):
+        pass
+
 
 clsmembers_pairs = inspect.getmembers(sys.modules[__name__], inspect.isclass)
 EXPERIMENTS = {k: v for (k, v) in clsmembers_pairs}

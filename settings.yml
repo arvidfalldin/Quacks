@@ -1,17 +1,16 @@
-experiment: 'SweepOrange'  #'SimulateOneRound'
+experiment: 'TestPolicy'  #'SimulateOneRound'
 experiment_settings:
   num_samples: 10000
   
-policy: 'GoBust'
+policy: 'ProbabilityOfExploding'
 policy_settings:
   setting1: 1
-  setting2: 2
 
 bag_settings:
   bought_tokens:
     o1: 0
     k1: 0
-    y1: 3
-    g4: 3 
+    y1: 0
+    g4: 0
 
 datahandler: 'RepeatSingleRound'
