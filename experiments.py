@@ -3,9 +3,12 @@ import inspect
 import numpy as np
 import matplotlib.pyplot as plt
 
-from game_mechanics import Token
+from game_mechanics import Board, Bag, Token
+from policies import POLICYS
+from environment import QuacksEnvironment
 
-class SimulateOneRound():
+
+class RepeatOneRound():
     """
     Simulate one round of quacks (possibly multiple times)
     """
@@ -148,36 +151,51 @@ class SweepOrange():
         self.bag.reset()
 
 
-class TestPolicy():
+class SingleRound():
     """
     Test policy (or something else) by simulating a single round of quacks
     (once)
     """
-    def __init__(self,
-                 policy,
-                 bag,
-                 datahandler,
-                 *args, **kwargs):
+    def __init__(self, settings, *args, **kwargs):
 
-        self.policy = policy
-        self.bag = bag
+        # Load the policy specified by the settings file
+        PolicyClass = POLICYS[settings['policy']]
+        self.policy = PolicyClass(**settings['policy_settings'])
+
+        # Initialize an empty environment
+        self.env = QuacksEnvironment()
+
+        # Setup a bag and an empty board and add to env
+        # as starting state
+        bag = Bag(**settings['bag_settings'])
+        board = Board()
+        self.env.reset(bag=bag, board=board)
+
+        # Save a copy of the settings if needed
+        self.settings = settings
 
     def run(self):
+        # First action is always to play a token
+        action = 1
+        board, bag = self.env.step(action)
+        while not board.has_exploded and action != 0:
+            action = self.policy(board, bag)
 
-        # Use the policy to play a round
-        outcome = self.policy.play(self.bag)
+            print('Board: ', board, ' ws: ', board.white_score)
+            print('Bag: ', bag)
+            print('Action: ', action)
 
-        print(outcome)
+            board, bag = self.env.step(action)
 
-        print("Board")
-        for token in outcome['rollout']:
-            print(token)
+        print('Board: ', board, ' ws: ', board.white_score)
+        print('Bag: ', bag)
 
-        print("Bag")
-        print(self.bag)
 
-    def reset(self):
-        self.bag.reset()
+        self.reset(board, bag)
+
+    def reset(self, board, bag):
+        played_tokens = board.empty()
+        bag.add(played_tokens)
 
     def process_results(self):
         pass

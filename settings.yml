@@ -1,8 +1,8 @@
-experiment: 'TestPolicy'  #'SimulateOneRound'
+experiment: 'SingleRound'  #'SimulateOneRound'
 experiment_settings:
   num_samples: 10000
   
-policy: 'ProbabilityOfExploding'
+policy: 'ProbOfExploding'
 policy_settings:
   setting1: 1
 

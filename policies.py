@@ -6,7 +6,7 @@ class BasePolicy():
     def __init__(self):
         pass
 
-    def rollout(self, bag):
+    def __call__(self, board, bag):
         raise NotImplementedError
 
     def reset(self,):
@@ -14,41 +14,47 @@ class BasePolicy():
 
 
 class GoBust(BasePolicy):
+    """
+    Play and keep playing until we explode
+    """
     def __init__(self, *args, **kwargs):
         self.reset()
 
     def reset(self):
-        self.white_score = 0
-        self.current_score = 0
-        self.rollout = []
+        pass
 
-    def play(self, bag):
-        multiplier = 1
-        while self.white_score < 8:
-            token = bag.sample()
-            if token.is_white:
-                self.white_score += token.value
-            self.current_score += token.value*multiplier
-            self.rollout.append(token)
+    def __call__(self, *args, **kwargs):
+        """
+        Always return True i.e. keep playing
+        """
+        return True
 
-            if token.color == 'yellow':
-                multiplier = 2
-            else:
-                multiplier = 1
 
-        # With this policy we always play until we explode
-        exploded = True
-
-        # Collect the outcome in a dict
-        outcome = {
-            'score': self.current_score,
-            'exploded': exploded,
-            'rollout': self.rollout,
-        }
-
+class ProbOfExploding():
+    def __init__(self, p_stop=1.0, *args, **kwargs):
         self.reset()
+        self.p_stop = p_stop
 
-        return outcome
+    def reset(self):
+        pass
+
+
+    def __call__(self, board, bag):
+
+        if board.potion_available:
+            last_token = board[-1]
+            if last_token.color == 'white' and last_token.value == 3:
+                return 2
+
+        # Check the probability of exploding on the next move
+        p_explode = probability_of_exploding(board, bag)
+
+        # If above threshold, end the round, else play
+        if p_explode > self.p_stop:
+            return 0
+        else:
+            return 1
+
 
 
 class ProbabilityOfExploding():
