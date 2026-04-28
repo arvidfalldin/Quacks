@@ -43,8 +43,10 @@ class Bag():
         self.n_tokens = 0
 
         # Init variables to keep track of all the white tokens
-        self.n_white_geq = {1: 0, 2: 0, 3: 0} # Num token of value greater than or equal
 
+        # Num token of value greater than or equal
+        self.n_white_geq = {1: 0, 2: 0, 3: 0}
+       
         self._setup_bag(bought_tokens)
 
     def _setup_bag(self, bought_tokens={}):
@@ -174,8 +176,7 @@ class Board():
         self.white_score = 0
         self.has_exploded = 0
         self.current_pos = 0
-        self.step_mult = 1 
-
+        self.step_mult = 1
 
     def play_token(self, token):
         """
@@ -190,7 +191,7 @@ class Board():
             # If white score is 8 or more we have exploded
             self.has_exploded = (self.white_score > 7)
 
-        # I a token is yellow the next token's
+        # If a token is yellow the next token's
         # value is multiplied with 2
         if token.is_yellow:
             self.step_mult = 2
@@ -209,7 +210,6 @@ class Board():
 
     def __getitem__(self, index):
         return self._tokens[index]
-
 
     def empty(self):
         """

@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from game_mechanics import Bag
+from game_mechanics_file import Bag
 from policies import POLICYS
 from experiments import EXPERIMENTS
 from datahandlers import DATAHANDLERS

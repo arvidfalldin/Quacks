@@ -1,5 +1,5 @@
 import numpy
-from game_mechanics import Bag, Board
+from game_mechanics_file import Bag, Board
 
 
 def probability_of_exploding(board: Board, bag: Bag):
