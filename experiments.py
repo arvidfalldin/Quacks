@@ -3,7 +3,7 @@ import inspect
 import numpy as np
 import matplotlib.pyplot as plt
 
-from game_mechanics import Board, Bag, Token
+from game_mechanics_file import Board, Bag, Token
 from policies import POLICYS
 from environment import QuacksEnvironment
 
