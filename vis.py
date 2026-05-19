@@ -49,6 +49,7 @@ class BoardIllustrator():
     def save(self, filename: str):
         pass
 
+
 class Droplet:
     def __init__(self, position: int = 0, rat_tails: int = 0):
         self.default_position = position
@@ -68,12 +69,11 @@ class Square:
         self.coins = coins
         self.ruby = ruby
 
-    def draw(self, ax, x, y, show_index=False):
+    def draw(self, ax, x, y, show_index=False, text_epsilon=0.01):
         """
         draw the square on the given axes at the specified coordinates
         """
-        bg_color = 'cyan'
-
+        bg_color = '#7cd0a2'
 
         radius = 0.4
         circle_patch = Circle((x, y), radius, color=bg_color, fill=True)
@@ -93,12 +93,29 @@ class Square:
         vp_x = x + radius * np.cos(7*np.pi/6)
         vp_y = y + radius * np.sin(7*np.pi/6)
 
-        vp_patch = Rectangle((vp_x - 0.15, vp_y - 0.15), 0.3, 0.3, color='yellow',
+        vp_patch = Rectangle((vp_x - 0.15, vp_y - 0.15),
+                             0.3,
+                             0.3,
+                             color='#dcbb89',
                              fill=True)
         # Add text for victory points
-        text = ax.text(vp_x, vp_y, str(self.victory_points), fontsize=5, ha='center',
-                       va='center')
-        
+        text = ax.text(vp_x, vp_y,
+                       str(self.victory_points),
+                       fontsize=5,
+                       ha='center',
+                       va='center',
+                       color='#000000',
+                       weight='bold',)
+
+        text = ax.text(vp_x + text_epsilon, vp_y + text_epsilon,
+                       str(self.victory_points),
+                       fontsize=5,
+                       ha='center',
+                       va='center',
+                       color='#a97a38',
+                       weight='bold',)
+
+
         text.set_visible(False)
 
         text.set_visible(True)
@@ -106,7 +123,23 @@ class Square:
         ax.add_patch(vp_patch)
 
         # North, inside the square, display the number of coins
-        ax.text(x, y + radius / 2, str(self.coins), fontsize=5, ha='center', va='center')
+        ax.text(x, y + 0.25 * radius, str(self.coins),
+                fontsize=6,
+                ha='center',
+                va='center',
+                weight='bold',
+                color='black')
+
+        # North, inside the square, display the number of coins
+        ax.text(x + text_epsilon,
+                y + 0.25 * radius + text_epsilon,
+                str(self.coins),
+                fontsize=6,
+                ha='center',
+                va='center',
+                weight='bold',
+                color='white')
+
 
 
 a = 0.1
@@ -153,7 +186,15 @@ while tiles < NUM_TILES:
 points = np.array(points)
 
 # Plot circles
+
 fig, ax = plt.subplots()
+# Plot the spiral as a think line in the background
+spiral_theta = np.linspace(theta_0 + 1.5 , theta, 1000)
+spiral_r = a + b * spiral_theta
+spiral_x = spiral_r * np.cos(spiral_theta)
+spiral_y = 0.9 * spiral_r * np.sin(spiral_theta)
+ax.plot(spiral_x, spiral_y, color='#b9e3d5', linewidth=10, zorder=0)
+
 for i, p in enumerate(points):
     # circle = plt.Circle(p, radius, fill=False)
     # ax.add_patch(circle)
@@ -163,40 +204,44 @@ for i, p in enumerate(points):
     square.draw(ax, p[0], p[1], show_index=False)
 
 
-droplet_position = 1
+# droplet_position = 1
 
-x, y = points[droplet_position - 1]
-droplet_patch = Circle((x, y), 0.4, color='red', fill=True)
-ax.add_patch(droplet_patch)
+# x, y = points[droplet_position - 1]
+# droplet_patch = Circle((x, y), 0.4, color='red', fill=True)
+# ax.add_patch(droplet_patch)
 
-droplet_symbol_patch1 = Circle((x, y), 0.2, color='white', fill=True)
-ax.add_patch(droplet_symbol_patch1)
+# droplet_symbol_patch1 = Circle((x, y), 0.2, color='white', fill=True)
+# ax.add_patch(droplet_symbol_patch1)
 
-droplet_symbol_patch2 = Rectangle((x-0.1, y-0.1 + np.sqrt(2)*0.1),
-                                  0.2,
-                                  0.2,
-                                  rotation_point='center',
-                                  angle=45,
-                                  color='white', fill=True)
-ax.add_patch(droplet_symbol_patch2)
+# droplet_symbol_patch2 = Rectangle((x-0.1, y-0.1 + np.sqrt(2)*0.1),
+#                                   0.2,
+#                                   0.2,
+#                                   rotation_point='center',
+#                                   angle=45,
+#                                   color='white', fill=True)
+# ax.add_patch(droplet_symbol_patch2)
 
 
-shrink_factor = 0.6
-droplet_symbol_patch3 = Circle((x, y), 0.2*shrink_factor, color='red', fill=True)
-ax.add_patch(droplet_symbol_patch3)
+# shrink_factor = 0.6
+# droplet_symbol_patch3 = Circle((x, y), 0.2*shrink_factor, color='red', fill=True)
+# ax.add_patch(droplet_symbol_patch3)
 
-droplet_symbol_patch4 = Rectangle((x-0.1*shrink_factor,
-                                   y-(0.1 - np.sqrt(2)*0.1)*shrink_factor),
-                                  0.2*shrink_factor,
-                                  0.2*shrink_factor,
-                                  rotation_point='center',
-                                  angle=45,
-                                  color='red', fill=True)
-ax.add_patch(droplet_symbol_patch4)
+# droplet_symbol_patch4 = Rectangle((x-0.1*shrink_factor,
+#                                    y-(0.1 - np.sqrt(2)*0.1)*shrink_factor),
+#                                   0.2*shrink_factor,
+#                                   0.2*shrink_factor,
+#                                   rotation_point='center',
+#                                   angle=45,
+#                                   color='red', fill=True)
+# ax.add_patch(droplet_symbol_patch4)
 
 ax.set_xlim(-6, 6)
 ax.set_ylim(-6, 6)
+ax.axis('off')
 
 ax.set_aspect('equal')
 
-fig.savefig('spiral_circles.png', bbox_inches='tight', dpi=300)
+fig.savefig('spiral_circles.png', bbox_inches='tight', dpi=600)
+fig.savefig('spiral_circles.jpg', bbox_inches='tight', dpi=600)
+fig.savefig('spiral_circles.pdf', bbox_inches='tight', dpi=600)
+fig.savefig('spiral_circles.svg', bbox_inches='tight', dpi=600)

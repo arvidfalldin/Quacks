@@ -38,7 +38,8 @@ class Player():
             victory_points: int = 0,
             rubies: int = 0,
             bag_kwargs: dict = None,
-            # brewing_policy: BrewingPolicy = None
+            # brewing_policy: BrewingPolicy = None,
+            # purchase_policy: PurchasePolicy = None
             ):
 
         # Player state
