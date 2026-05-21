@@ -1,8 +1,7 @@
 from engine.chips import Chip, ChipColor
-from engine.player import Player
 from engine.environment import QuacksEnvironment
-
-from policy.policy import AlwaysExplodePolicy, StopAtProbabilityPolicy
+from engine.player import Player
+from policy.brewing import StopAtProbabilityPolicy
 
 
 def quantitative_test_1():
@@ -43,8 +42,7 @@ def quantitative_test_1():
     false_values = [n for n, u in samples if not u]
 
     # Histogram bins
-    bins = range(min(n for n, _ in samples),
-                max(n for n, _ in samples) + 2)
+    bins = range(min(n for n, _ in samples), max(n for n, _ in samples) + 2)
 
     # Stacked histogram
     fig, ax = plt.subplots()
@@ -52,25 +50,26 @@ def quantitative_test_1():
         [true_values, false_values],
         bins=bins,
         stacked=True,
-        label=["Exploded", "Not Exploded"]
+        label=["Exploded", "Not Exploded"],
     )
 
     ax.set_xlabel("n")
     ax.set_ylabel("count")
     ax.legend()
-    fig.savefig("Outcome1.png", bbox_inches='tight', dpi=300)
+    fig.savefig("Outcome1.png", bbox_inches="tight", dpi=300)
+
 
 def quantitative_test_2():
 
     player1 = Player("Alice")
     env = QuacksEnvironment(player1)
 
-
     # Add a bunch of orange chips to the bag to test the policy
     for _ in range(10):
         player1.bag.add(Chip(color=ChipColor.ORANGE, value=1))
 
     import numpy as np
+
     thresholds = np.linspace(0.0, 1.0, num=40)
 
     explosion_rates = []
@@ -103,21 +102,21 @@ def quantitative_test_2():
         coin_averages.append(average_coins)
 
     import matplotlib.pyplot as plt
+
     fig, ax1 = plt.subplots(1, 1, figsize=(8, 6))
     ax1.plot(thresholds, explosion_rates, label="Explosion Rate")
-    
+
     # Draw x=x as a reference line
-    ax1.plot(thresholds, thresholds, color='gray', linestyle='--', label="y=x")
+    ax1.plot(thresholds, thresholds, color="gray", linestyle="--", label="y=x")
     ax1.set_xlabel("Threshold")
     ax1.set_ylabel("Value")
     ax1.legend()
 
     ax2 = ax1.twinx()
-    ax2.plot(thresholds, coin_averages, color='red',
-             label="Average Coins")
+    ax2.plot(thresholds, coin_averages, color="red", label="Average Coins")
     ax2.set_ylabel("Value")
     ax2.legend(loc="lower right")
-    fig.savefig("Outcome2.png", bbox_inches='tight', dpi=300)
+    fig.savefig("Outcome2.png", bbox_inches="tight", dpi=300)
 
 
 def main():
@@ -128,17 +127,25 @@ def main():
     for _ in range(5):
         player1.bag.add(Chip(color=ChipColor.ORANGE, value=1))
 
-
     policy = StopAtProbabilityPolicy(0.0)
     obs, done = env.reset()
     while not done:
         action = policy(obs)
         obs, done = env.step(action)
-    
+
     print(env.pot)
+
+
+def test_marketplace():
+    from marketplace import IngredientSet2, Marketplace
+
+    ingredient_set = IngredientSet2()
+    marketplace = Marketplace(ingredient_set=ingredient_set)
+
 
 if __name__ == "__main__":
     # quantitative_test1()
-    quantitative_test_2()
+    # quantitative_test_2()
     # main()
 
+    test_marketplace()
