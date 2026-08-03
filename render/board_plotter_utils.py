@@ -4,6 +4,7 @@ import matplotlib.patches as patches
 import numpy as np
 
 from engine.constants import COINS, NUM_TILES, RUBY, VICTORY_POINTS
+from render.colors import TILE_BASE_COLOR, VICTORY_POINT_COLOR
 
 
 @dataclass
@@ -36,12 +37,12 @@ def make_board_spiral(spiral_params: SpiralParams) -> tuple[np.ndarray, np.ndarr
 
     theta = spiral_params.theta_0
 
-    tile_points = [theta2xy(theta, a=a, bx=bx, by=by)]
-    spiral_points = [theta2xy(theta, a=a, bx=bx, by=by)]
+    tile_points = [theta2xy(theta, spiral_params=spiral_params)]
+    spiral_points = [theta2xy(theta, spiral_params=spiral_params)]
 
     while len(tile_points) < NUM_TILES:
-        theta += delta_theta
-        spiral_points.append(theta2xy(theta, a=a, bx=bx, by=by))
+        theta += spiral_params.delta_theta
+        spiral_points.append(theta2xy(theta, spiral_params=spiral_params))
 
         # Check the straight line distance between the last tile point and the current spiral point
         last_tile_point = tile_points[-1]
@@ -50,7 +51,7 @@ def make_board_spiral(spiral_params: SpiralParams) -> tuple[np.ndarray, np.ndarr
             np.array(current_spiral_point) - np.array(last_tile_point)
         )
 
-        if distance >= spacing:
+        if distance >= spiral_params.spacing:
             tile_points.append(current_spiral_point)
 
     return np.array(spiral_points), np.array(tile_points)
@@ -58,7 +59,7 @@ def make_board_spiral(spiral_params: SpiralParams) -> tuple[np.ndarray, np.ndarr
 
 def draw_tile(ax, index, xy, scale=1.0):
     radius = 0.2 * scale
-    circle = patches.Circle(xy, radius=radius, color=TILE_COLOR, fill=True)
+    circle = patches.Circle(xy, radius=radius, color=TILE_BASE_COLOR, fill=True)
     ax.add_patch(circle)
 
     width = 0.15 * scale
